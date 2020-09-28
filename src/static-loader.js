@@ -11,8 +11,8 @@ function hasAliases(node) {
   return node.type === "ArrayExpression" && !!node.elements.length;
 }
 
-function addStep(step, info) {
-  stepRegistry.add(step.value, null, info.filePath, info.span, null);
+function addStep(step, info, params) {
+  stepRegistry.add(step.value, null, params, info.filePath, info.span, null);
 }
 
 function addAliases(aliases, info) {
@@ -23,6 +23,7 @@ function addAliases(aliases, info) {
 
 function processNode(node, filePath) {
   var stepNode = node.arguments[0];
+  var stepFunc = node.arguments[1] ? node.arguments[1]: null;
   var span = {
     start: node.loc.start.line,
     end: node.loc.end.line,
@@ -33,7 +34,7 @@ function processNode(node, filePath) {
     if (hasAliases(stepNode)) {
       addAliases(stepNode.elements, { filePath: filePath, span: span });
     } else if (stepNode.type === "Literal") {
-      addStep(stepNode, { filePath: filePath, span: span });
+      addStep(stepNode, { filePath: filePath, span: span }, stepFunc ? stepFunc.params.length : null);
     }
   } catch (e) {
     logger.info(e);

@@ -19,7 +19,7 @@ var step = function (stepName, options, stepFunction) {
   if (typeof stepName === "object" && !!stepName.length) {
     stepRegistry.addAlias(stepName, stepFunction, filepath, {}, options);
   } else if (typeof stepName === "string") {
-    stepRegistry.add(stepName, stepFunction, filepath, {}, options);
+    stepRegistry.add(stepName, stepFunction, null, filepath, {}, options);
   }
 };
 

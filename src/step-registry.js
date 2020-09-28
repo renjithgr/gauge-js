@@ -15,7 +15,7 @@ var StepRegistry = function () {
  * @param options Optional parameters defined with the step.
  * @returns The step added.
  */
-StepRegistry.prototype.add = function (stepText, stepFunction, filePath, span, options) {
+StepRegistry.prototype.add = function (stepText, stepFunction, stepFuncParams, filePath, span, options) {
   if (!stepText.length) {
     throw new Error("Step text cannot be empty.");
   }
@@ -27,6 +27,7 @@ StepRegistry.prototype.add = function (stepText, stepFunction, filePath, span, o
 
   this.registry[generalisedText] = {
     fn: stepFunction,
+    fnParamsCount: stepFuncParams,
     stepText: stepText,
     generalisedText: generalisedText,
     fileLocations: [
@@ -116,6 +117,9 @@ StepRegistry.prototype.validate = function (stepName) {
   var step = this.get(stepName);
   if (!step) {
     return { valid: false, reason: "notfound", file: null };
+  }
+  if (step.fnParamsCount !== stepParser.getParams(step.stepText).length) {
+    return { valid: false, reason: "parameter mismatch", file: step.fileLocations[0].filePath };
   }
   if (step.fileLocations.length > 1) {
     return { valid: false, reason: "duplicate", file: step.fileLocations[0].filePath };
