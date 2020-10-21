@@ -50,6 +50,13 @@ else if (process.argv[2] === "--start") {
   }
   var cmd = process.env.gauge_nodejs_bin || "node";
   var runner = child_process.spawn(cmd, args, { env: process.env, silent: false, stdio: "inherit" });
+  process.on('beforeExit', (code) => {
+    try {
+      if (!runner.killed) { runner.kill('SIGINT'); }
+    } finally {
+      process.exit(code);
+    }
+  })
   runner.on("error", function (err) {
     console.trace(err.stack);
   });
