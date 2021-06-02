@@ -29,7 +29,7 @@
     "escodegen": "^2.0.0",
     "esprima": "^4.0.1",
     "estraverse": "^5.2.0",
-    "klaw-sync": "^3.0.2",
+    "klaw-sync": "^6.0.0",
     "protobufjs": "^6.11.2",
     "q": "^1.5.0"
   },
